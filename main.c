@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-
 #define MAX_EMPRUNTS 100   // nombre maximum d’emprunts
 #define COLONNES 8         // N_CIN, N_livre, J1, M1, A1, J2, M2, A2
 #define MAX_LIVRES 100
-
 
 int Emprunts[MAX_EMPRUNTS][8];
 int nbEmprunts = 0;
@@ -14,20 +12,28 @@ int T_NLivre[MAX_LIVRES];
 char T_Titre[MAX_LIVRES][20];  // 20 caractères max par titre
 int T_Nbr_exp[MAX_LIVRES];
 int n = 0; // nombre de livres actuels
-
-
 // Historique des emprunts terminés
 int EmpruntsHistorique[MAX_EMPRUNTS][8];
 int nbEmpruntsHistorique = 0;
-
-
 //int emprunts[MAX_EMPRUNTS][COLONNES];
-
 void menuBibliotheque();
 void menuEmprunts();
 void menuStatistiques();
+void initialiserLivres() {
+    T_NLivre[0] = 1;
+    strcpy(T_Titre[0], "C_Prog");
+    T_Nbr_exp[0] = 5;
 
+    T_NLivre[1] = 2;
+    strcpy(T_Titre[1], "Algorithms");
+    T_Nbr_exp[1] = 3;
 
+    T_NLivre[2] = 3;
+    strcpy(T_Titre[2], "Java_Prog");
+    T_Nbr_exp[2] = 4;
+
+    n = 3;
+}
 void afficherMenu() {
     printf("||----------------------------------------------------------------------------||\n");
     printf("||----------------------------------------------------------------------------||\n");
@@ -45,8 +51,6 @@ void afficherMenu() {
     printf("||                        4. Quitter l'application                            ||\n");
     printf("||----------------------------------------------------------------------------||\n");
 }
-
-
 int existeEmprunt(int numLivre) {
     for (int i = 0; i < nbEmprunts; i++) {
         if (Emprunts[i][1] == numLivre) {
@@ -55,9 +59,32 @@ int existeEmprunt(int numLivre) {
     }
     return 0;
 }
+void initialiserEmprunts() {
+    // Premier emprunt
+    Emprunts[0][0] = 1;  // CIN
+    Emprunts[0][1] = 1;  // Num livre
+    Emprunts[0][2] = 5;  // Jour emprunt
+    Emprunts[0][3] = 11; // Mois emprunt
+    Emprunts[0][4] = 2023;// Annee emprunt
+    Emprunts[0][5] = 5;  // Jour retour prévu
+    Emprunts[0][6] = 12; // Mois retour
+    Emprunts[0][7] = 2023;// Annee retour
 
+    // Deuxième emprunt
+    Emprunts[1][0] = 1;
+    Emprunts[1][1] = 2;
+    Emprunts[1][2] = 9;
+    Emprunts[1][3] = 3;
+    Emprunts[1][4] = 2024;
+    Emprunts[1][5] = 9;
+    Emprunts[1][6] = 4;
+    Emprunts[1][7] = 2024;
 
+    nbEmprunts = 2; // Nombre d'emprunts initialisés
+}
 int main() {
+    initialiserLivres();
+    initialiserEmprunts();
     int choix;
 
     do {
@@ -86,8 +113,6 @@ int main() {
 
     return 0;
 }
-
-
 void listeLivre() {
     if (n == 0) {
         printf("\nPas de livre dans la bibliothèque !!!\n");
@@ -100,7 +125,6 @@ void listeLivre() {
     }
     printf("----------------------------------------------------\n");
 }
-
 void ajouterLivre() {
     if (n >= MAX_LIVRES) {
         printf("Bibliothèque pleine !\n");
@@ -135,7 +159,6 @@ void ajouterLivre() {
     n++;
     printf("Livre ajouté avec succès !\n");
 }
-
 void supprimerLivre(int num){
 if(existeEmprunt(num)==1){
 printf("On peut pas supprimer ,il est emprunté !!!\n");
@@ -174,7 +197,6 @@ if(trouve!=1){
     printf("\nLivre n'existe pas!!!.\n");
 }
 }
-
 bool rechercherLivreNumero(int num) {
     for(int i = 0; i < n; i++) {
         if(T_NLivre[i] == num) {
@@ -183,7 +205,6 @@ bool rechercherLivreNumero(int num) {
     }
     return false;
 }
-
 bool rechercherLivreTitre(char titre[]) {
     for(int i = 0; i < n; i++) {
         if(strcmp(T_Titre[i], titre) == 0) {
@@ -192,7 +213,6 @@ bool rechercherLivreTitre(char titre[]) {
     }
     return false;
 }
-
 void LivreDispo() {
     int trouve = 0;
 
@@ -212,12 +232,6 @@ void LivreDispo() {
 
     printf("=======================================\n");
 }
-
-
-
-
-
-
 void menuBibliotheque() {
     int choix,numLiv,nbex,choixRech;
     do {
@@ -298,9 +312,6 @@ void menuBibliotheque() {
         }
     } while (choix != 7);
 }
-
-
-
 int nbEmpruntsAdherent(int cin) {
     int count = 0;
     for(int i = 0; i < nbEmprunts; i++) {
@@ -308,7 +319,6 @@ int nbEmpruntsAdherent(int cin) {
     }
     return count;
 }
-
 void ajouterEmprunt() {
     int cin, numLivre, jour, mois, annee;
 
@@ -366,8 +376,6 @@ void ajouterEmprunt() {
 
     printf("✔ Emprunt enregistré avec succès.\n");
 }
-
-
 void consulterEmpruntsAdherent() {
     int cin, trouve = 0;
     printf("Entrer CIN adhérent : ");
@@ -387,8 +395,6 @@ void consulterEmpruntsAdherent() {
     printf("Aucun emprunt trouvé.\n");
     }
 }
-
-
 void retourLivre() {
     int cin, numLivre, i, j;
     int pos = -1;
@@ -421,6 +427,11 @@ void retourLivre() {
         }
     }
 
+    /* Copier l'emprunt dans EmpruntsHistorique */
+    for(int k = 0; k < 8; k++)
+        EmpruntsHistorique[nbEmpruntsHistorique][k] = Emprunts[pos][k];
+    nbEmpruntsHistorique++;
+
     /* Suppression ==> decalage) */
     for(j = pos; j < nbEmprunts - 1; j++) {
         for(int k = 0; k < 8; k++)
@@ -431,8 +442,6 @@ void retourLivre() {
 
     printf("\n✔ Le retour du livre a été enregistré avec succès.\n");
 }
-
-
 void afficherEmpruntsEnCours() {
     if(nbEmprunts == 0) {
         printf("Aucun emprunt.\n");
@@ -446,15 +455,12 @@ void afficherEmpruntsEnCours() {
             Emprunts[i][5], Emprunts[i][6], Emprunts[i][7]);
     }
 }
-
 int comparerDate(int j1, int m1, int a1, int j2, int m2, int a2) {
     if(a1 != a2) return (a1 < a2) ? -1 : 1;
     if(m1 != m2) return (m1 < m2) ? -1 : 1;
     if(j1 != j2) return (j1 < j2) ? -1 : 1;
     return 0;
 }
-
-
 void afficherRetards() {
     int j, m, a;
     printf("Entrer la date courante (j m a) : ");
@@ -468,7 +474,6 @@ void afficherRetards() {
             }
     }
 }
-
 void afficherParDateRetour() {
     int j, m, a;
     printf("Entrer une date (j m a) : ");
@@ -481,7 +486,6 @@ void afficherParDateRetour() {
             printf("CIN %d | Livre %d\n", Emprunts[i][0], Emprunts[i][1]);
     }
 }
-
 void supprimerEmpruntsPeriode() {
 
     int j1, m1, a1, j2, m2, a2;
@@ -524,7 +528,6 @@ void supprimerEmpruntsPeriode() {
 
     printf("\n✔ Suppression terminée.\n");
 }
-
 void afficherTousEmprunts() {
 
     if(nbEmprunts == 0) {
@@ -539,8 +542,6 @@ void afficherTousEmprunts() {
             Emprunts[i][5], Emprunts[i][6], Emprunts[i][7]);
     }
 }
-
-
 void menuEmprunts() {
     int choix;
     do {
@@ -584,8 +585,6 @@ void menuEmprunts() {
 
 
 }
-
-
 //pour accéder aux données
 void getEmpruntGlobal(int i, int e[8]) {
     if(i < nbEmprunts) {
@@ -596,8 +595,6 @@ void getEmpruntGlobal(int i, int e[8]) {
             e[k] = EmpruntsHistorique[i - nbEmprunts][k];
     }
 }
-
-
 //Compter totaux
 void compterTotaux() {
     int nbAdherents = 0;
@@ -620,8 +617,6 @@ void compterTotaux() {
     printf("Nombre total d'adhérents ayant emprunté : %d\n", nbAdherents);
     printf("Nombre total d'emprunts : %d\n", totalEmprunts);
 }
-
-
 //Livre le plus emprunté
 void livrePlusEmprunte() {
     int compteur[n];
@@ -647,8 +642,6 @@ void livrePlusEmprunte() {
         if(compteur[i] == max)
             printf("Livre %d\n", T_NLivre[i]);
 }
-
-
 // Livres jamais empruntés
 void livresJamaisEmpruntes() {
     int compteur[n];
@@ -670,8 +663,6 @@ void livresJamaisEmpruntes() {
         if(compteur[i] == 0)
             printf("Livre %d\n", T_NLivre[i]);
 }
-
-
 //Livre le plus emprunté dans une période
 void livrePlusEmpruntePeriode() {
     int j1, m1, a1, j2, m2, a2;
@@ -706,8 +697,6 @@ void livrePlusEmpruntePeriode() {
         if(compteur[i] == max)
             printf("Livre %d\n", T_NLivre[i]);
 }
-
-
 // Adhérent le plus fréquent
 void adherentPlusFrequent() {
     int compteur[1000] = {0};
@@ -728,9 +717,6 @@ void adherentPlusFrequent() {
         if(compteur[i] == max)
             printf("CIN %d\n", i);
 }
-
-
-
 void menuStatistiques() {
         int choix;
         do{
